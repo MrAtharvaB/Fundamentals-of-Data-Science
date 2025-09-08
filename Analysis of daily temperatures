@@ -1,0 +1,56 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+file_path = '/content/Weather data.csv'  
+df = pd.read_csv(file_path)
+
+print("First few rows of the dataset:")
+print(df.head())
+
+if 'Date' in df.columns:
+    df['Date'] = pd.to_datetime(df['Date'])
+
+numeric_cols = df.select_dtypes(include='number').columns
+cities = numeric_cols.tolist()
+
+print("\n=== Descriptive Statistics ===")
+for city in cities:
+    mean_val = df[city].mean()
+    median_val = df[city].median()
+    mode_vals = df[city].mode()
+    mode_val = mode_vals.iloc[0] if not mode_vals.empty else "No mode"
+
+    print(f"\nCity: {city}")
+    print(f"Mean: {mean_val:.2f}")
+    print(f"Median: {median_val:.2f}")
+    print(f"Mode: {mode_val:.2f}" if isinstance(mode_val, (int, float)) else "Mode: None")
+
+plt.figure(figsize=(12, 6))
+for city in cities:
+    sns.kdeplot(df[city], label=city, fill=True)
+plt.title("Temperature Distribution by City")
+plt.xlabel("Temperature")
+plt.ylabel("Density")
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+plt.figure(figsize=(10, 6))
+sns.boxplot(data=df[cities])
+plt.title("Temperature Comparison (Boxplot)")
+plt.ylabel("Temperature")
+plt.xlabel("City")
+plt.tight_layout()
+plt.show()
+
+if 'Date' in df.columns:
+    plt.figure(figsize=(14, 6))
+    for city in cities:
+        plt.plot(df['Date'], df[city], label=city)
+    plt.title("Daily Temperatures Over Time")
+    plt.xlabel("Date")
+    plt.ylabel("Temperature")
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
