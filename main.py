@@ -30,7 +30,7 @@ for name, model in models:
     print(f"{name} Accuracy: {cv_results.mean():.4f}")
 
 plt.figure(figsize=(8,6))
-plt.boxplot(results, labels=names)
+plt.boxplot(results, labels=names) 
 plt.title('Algorithm Comparison on Wine Dataset')
 plt.ylabel('Accuracy')
 plt.xlabel('Algorithms')
@@ -38,3 +38,4 @@ plt.show()
 
 best_index = np.argmax([np.mean(result) for result in results])
 print("Best Model:", names[best_index])
+
